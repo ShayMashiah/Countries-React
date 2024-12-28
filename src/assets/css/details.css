@@ -16,9 +16,12 @@ body {
   column-gap: 12px;
 }
 
+
 .country-details {
   width: 100%;
 }
+
+
 
 @media (min-width: 64em) {
   .country-details {
@@ -69,14 +72,14 @@ body {
   padding: 40px 0;
 }
 
-.country-info h1 {
+.country-info h2 {
   color: #111517;
   margin-bottom: 30px;
 }
 
 .country-info strong {
   text-transform: capitalize;
-  color: #111517;
+  color:#111517;
 }
 
 .country-info strong.warning {
