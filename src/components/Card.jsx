@@ -4,24 +4,17 @@ import {Link} from 'react-router-dom';
 import CountryFlag from './CountryFlag';
 import CountryInfo from './CountryInfo.jsx';
 
-const Card = () => {
+const Card = (country) => {
   return (
-<div className="container">
-    <div className="countries-grid">
-      {countriesData.map((country, index) => (
-        
-        <Link to={`/details/${country.name}`}
-        key={index}  
-        className="country"> 
+            <Link to={`/details/${country.name}`}
+            key={country.name}  
+            className="country"> 
 
-        <CountryFlag flag={country.flag} name={country.name} />
+            <CountryFlag flag={country.flag} name={country.name} />
         
-        <CountryInfo name={country.name} population={country.population} region={country.region} capital={country.capital} />
+            <CountryInfo name={country.name} population={country.population} region={country.region} capital={country.capital} />
         
-        </Link>
-      ))}
-    </div>
-    </div>
+            </Link>
   );
 };
 
