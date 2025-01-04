@@ -1,5 +1,4 @@
 import '../assets/css/common.css';
-import countriesData from '../assets/CountriesData.json';
 import {Link} from 'react-router-dom';
 import CountryFlag from './CountryFlag';
 import CountryInfo from './CountryInfo.jsx';

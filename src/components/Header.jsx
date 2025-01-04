@@ -1,5 +1,6 @@
 import '../assets/css/common.css'
 import {Link} from 'react-router-dom';
+import { HOME_PAGE_PATH } from '../assets/const';
 
 const Header = () => {
   const toggleDarkMode = () => {
@@ -10,7 +11,7 @@ const Header = () => {
     <header className='header'>
         <div className="container">
             <div className="logo">
-              <Link to={'/'}>
+              <Link to={HOME_PAGE_PATH}>
                   <h1>Where in the world?</h1>
               </Link>
             </div>

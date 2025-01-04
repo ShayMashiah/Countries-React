@@ -1,40 +1,57 @@
 import Header from "../components/Header";
 import Card from "../components/Card";
-import { useState } from 'react';
-import data from "../assets/CountriesData.json";
+import { useState, useEffect } from 'react';
 
 
 const Home = () => {
-    const [filteredData, setFilteredData] = useState(data);
-    
-    
+    const [data, setData] = useState([]);
+    const [filteredData, setFilteredData] = useState([]);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [selectedRegion, setSelectedRegion] = useState("Filter by Region");
+
+    useEffect(() => {
+        const fetchCountries = async () => {
+            try {
+                const response = await fetch("https://restcountries.com/v3.1/all");
+                const countries = await response.json();
+                const formattedCountries = countries.map((country) => ({
+                    name: country.name.common,
+                    region: country.region,
+                    flag: country.flags.svg,
+                    population: country.population,
+                    capital: country.capital ? country.capital[0] : "N/A",
+                }));
+                setData(formattedCountries);
+                setFilteredData(formattedCountries);
+            } catch (error) {
+                console.error("Failed to fetch countries data:", error);
+            }
+        };
+
+        fetchCountries();
+    }, []);
+
     const handleSearchChange = (e) => {
         const text = e.target.value;
         setFilteredData(data.filter((country) =>
-            country.name.toLocaleLowerCase().includes(text.toLocaleLowerCase())
-            )
-        );         
+            country.name.toLowerCase().includes(text.toLowerCase())
+        ));
     };
-    
 
     const dropDownListClicked = () => {
-        const dropDown = document.getElementsByClassName('dropdown-wrapper')[0];
-        if (dropDown) {
-            dropDown.classList.toggle('open');
-        } else {
-            console.error('Dropdown element not found');
-        }
-    };   
-
-    const handleRegionFilter = (region) => {
-        if (region == 'All') {
-            setFilteredData(data);
-        } else {
-            setFilteredData(data.filter((country) => country.region == region));
-        }
-        document.getElementsByClassName('filter-by-region-txt')[0].innerText = region;
+        setIsDropdownOpen((prev) => !prev);
     };
     
+
+    const handleRegionFilter = (region) => {
+        if (region === 'All') {
+            setFilteredData(data);
+        } else {
+            setFilteredData(data.filter((country) => country.region === region));
+        }
+        setSelectedRegion(region);
+    };
+
     return (
         <>
         <Header />
@@ -43,16 +60,16 @@ const Home = () => {
                 <div className="search-wrapper">
                     <i className="search-icon"></i>
                     <input
-                    type="text"
-                    className="search-input"
-                    placeholder="Search for a country..."
-                    onChange={handleSearchChange}
+                        type="text"
+                        className="search-input"
+                        placeholder="Search for a country..."
+                        onChange={handleSearchChange}
                     />
                 </div>
 
-                <div className="dropdown-wrapper" onClick={dropDownListClicked}>
-                    <div className="dropdown-header flex flex-jc-sb flex-ai-c">
-                        <span className="filter-by-region-txt">Filter by Region</span>
+            <div className={`dropdown-wrapper ${isDropdownOpen ? "open" : ""}`} onClick={dropDownListClicked}>
+                <div className="dropdown-header flex flex-jc-sb flex-ai-c">
+                        <span className="filter-by-region-txt">{selectedRegion}</span>
                         <i className="fa-regular fa-chevron-down icon"></i>
                     </div>
                     <div className="dropdown-body">
@@ -73,13 +90,12 @@ const Home = () => {
             <div className="countries-grid">
                 {filteredData.map((country) => (
                     <Card
-                    key={country.name}
-                    {...country}
+                        key={country.name}
+                        {...country}
                     />
                 ))}
             </div>
         </div>
-        
         </>
     );
 };
